@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Private Spielesammlung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Kleiner Scrollbar-Stil für bessere Optik */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c; /* dark gray */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* medium gray */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* light gray */
+        }
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 200ms ease-out, transform 200ms ease-out;
+        }
+        .modal-leave {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-leave-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 150ms ease-in, transform 150ms ease-in;
+        }
+        select {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.4-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.65em auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-white mb-2">Meine Private Spielesammlung</h1>
+            <p class="text-lg text-gray-400">Eine digitale Übersicht meiner Brett- und Kartenspiele.</p>
+        </header>
+
+        <div class="bg-gray-800 p-4 rounded-lg mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sticky top-4 z-10 shadow-lg border border-gray-700">
+            <div class="lg:col-span-2">
+                <input type="text" id="search-input" placeholder="Spiel suchen..." class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <select id="category-filter" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="all">Alle Kategorien</option>
+                </select>
+            </div>
+            <div>
+                <select id="players-filter" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="0">Für jede Spielerzahl</option>
+                    <option value="1">Für 1 Spieler</option>
+                    <option value="2">Für 2 Spieler</option>
+                    <option value="3">Für 3 Spieler</option>
+                    <option value="4">Für 4 Spieler</option>
+                    <option value="5">Für 5 Spieler</option>
+                    <option value="6">Für 6 Spieler</option>
+                    <option value="7">Für 7+ Spieler</option>
+                </select>
+            </div>
+            <div>
+                <select id="duration-filter" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <option value="0">Alle Spielzeiten</option>
+                    <option value="30">max. 30 Min.</option>
+                    <option value="60">max. 60 Min.</option>
+                    <option value="90">max. 90 Min.</option>
+                    <option value="120">max. 120 Min.</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg border border-gray-700">
+            <table class="w-full min-w-max">
+                <thead class="bg-gray-700/50">
+                    <tr>
+                        <th class="p-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider">Spielname</th>
+                        <th class="p-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider">Kategorie</th>
+                        <th class="p-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider hidden sm:table-cell">Alter</th>
+                        <th class="p-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider hidden md:table-cell">Spielerzahl</th>
+                        <th class="p-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider hidden sm:table-cell">Spieldauer</th>
+                    </tr>
+                </thead>
+                <tbody id="game-table-body" class="divide-y divide-gray-700">
+                    <!-- Spiel-Einträge werden hier per JavaScript eingefügt -->
+                </tbody>
+            </table>
+             <div id="no-results" class="hidden text-center p-8 text-gray-400">
+                <p class="text-xl">Keine Spiele gefunden.</p>
+                <p>Bitte ändern Sie Ihre Such- oder Filterkriterien.</p>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>&copy; 2024 Meine Private Spielesammlung. Erstellt mit KI.</p>
+        </footer>
+    </div>
+
+    <!-- Modal für Spieldetails -->
+    <div id="game-modal-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden modal-leave">
+        <div id="game-modal-content" class="bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+            <div class="p-6 border-b border-gray-700">
+                <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+                <p id="modal-category" class="text-sm text-blue-400 uppercase tracking-wider"></p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                    <div><p class="text-sm text-gray-400">Alter</p><p id="modal-age" class="text-lg font-semibold text-white"></p></div>
+                    <div><p class="text-sm text-gray-400">Spieler</p><p id="modal-players" class="text-lg font-semibold text-white"></p></div>
+                    <div><p class="text-sm text-gray-400">Dauer</p><p id="modal-duration" class="text-lg font-semibold text-white"></p></div>
+                </div>
+                <div id="modal-description" class="text-gray-300 space-y-4"></div>
+            </div>
+            <div class="p-4 bg-gray-800/50 border-t border-gray-700 text-right">
+                <button id="modal-close-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATENBANK ---
+        const games = [
+            { name: '7 Wonders', category: 'Strategiespiel', age: '10+', minAge: 10, players: '2-7', minPlayers: 2, maxPlayers: 7, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Führe eine antike Zivilisation an und errichte das mächtigste Weltwunder. Sammle Siegpunkte durch militärische, wissenschaftliche, kulturelle und wirtschaftliche Entwicklungen.</p><h3>Spielablauf:</h3><p>Das Spiel geht über drei Zeitalter. In jedem Zeitalter erhalten die Spieler einen Stapel Karten. Sie wählen eine Karte aus, legen sie vor sich ab und geben die restlichen Karten an ihren Nachbarn weiter (Card-Drafting). Dieser Vorgang wird wiederholt, bis alle Karten verteilt sind. Mit den Karten baut man seine Stadt aus, sammelt Ressourcen, rüstet militärisch auf oder baut am eigenen Weltwunder.</p>' },
+            { name: '7 Wonders Architects', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-7', minPlayers: 2, maxPlayers: 7, duration: '25 Min.', minDuration: 25, maxDuration: 25, description: '<h3>Ziel des Spiels:</h3><p>Werde zum größten Architekten der Antike, indem du als Erster dein Weltwunder vollständig errichtest oder am Ende die meisten Siegpunkte sammelst.</p><h3>Spielablauf:</h3><p>Eine vereinfachte und schnellere Version von 7 Wonders. Die Spieler wählen reihum eine von drei ausliegenden Karten (links, Mitte, rechts). Mit den Karten sammelt man Ressourcen zum Bau des eigenen Wunders, rüstet militärisch auf, macht wissenschaftliche Fortschritte oder nutzt die Hilfe einer Katze. Das Spiel endet, sobald ein Spieler sein Wunder fertiggestellt hat.</p>' },
+            { name: '10', category: 'Kartenspiel', age: '10+', minAge: 10, players: '2-6', minPlayers: 2, maxPlayers: 6, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Sammle Karten in verschiedenen Farben, aber pass auf, dass du nicht zu viele Punkte einer Farbe sammelst, denn das gibt Minuspunkte.</p><h3>Spielablauf:</h3><p>Ein schnelles und cleveres Kartenspiel, bei dem man reihum Karten zieht oder aus der Mitte nimmt, um Sets zu bilden. Man muss rechtzeitig aufhören, um keine Minuspunkte zu kassieren.</p>' },
+            { name: '80 Days', category: 'Thematisches Spiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60 Min.', minDuration: 60, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Reise in 80 Tagen um die Welt. Plane deine Route, packe deine Koffer und sei schneller als deine Mitstreiter.</p><h3>Spielablauf:</h3><p>Nutze Züge und Schiffe, aber achte auf dein Geld und unvorhergesehene Ereignisse. Ein spannendes Wettrennen gegen die Zeit und die anderen Spieler rund um den Globus.</p>' },
+            { name: 'Abgestaubt!', category: 'Party- & Quizspiel', age: '8+', minAge: 8, players: '2-6', minPlayers: 2, maxPlayers: 6, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Schätze, welche von fünf kuriosen Antworten auf eine Frage die richtige ist.</p><h3>Spielablauf:</h3><p>Wer am besten blufft und die Lügen der anderen durchschaut, sammelt die meisten Punkte. Ein lustiges Spiel für Raterunden.</p>' },
+            { name: 'Die Legenden von Andor', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Schlüpft in die Rollen von Helden und beschützt gemeinsam das Land Andor vor einfallenden Monstern.</p><h3>Spielablauf:</h3><p>Jede "Legende" hat eigene Ziele, die es gemeinsam zu meistern gilt. Das Spiel wird durch Legendenkarten gesteuert, die eine Geschichte erzählen und die Helden vor immer neue Herausforderungen stellen.</p>' },
+            { name: 'Andor Junior', category: 'Kooperatives Spiel', age: '7+', minAge: 7, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30-45 Min.', minDuration: 30, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Als junge Helden müsst ihr gemeinsam die verlorenen Wolfsjungen finden und zur alten Burg zurückbringen, bevor der Drache die Rietburg erreicht.</p><h3>Spielablauf:</h3><p>Eine vereinfachte, kindgerechte Version des großen Bruders. Die Spieler bewegen sich kooperativ über das Land, bekämpfen Gors und erfüllen Aufgaben.</p>' },
+            { name: 'Arche Nova', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '90-150 Min.', minDuration: 90, maxDuration: 150, description: '<h3>Ziel des Spiels:</h3><p>Plane und baue einen modernen, wissenschaftlich geführten Zoo. Baue Gehege, beheimatete Tiere und unterstütze Artenschutzprojekte.</p><h3>Spielablauf:</h3><p>Ein komplexes Expertenspiel, bei dem man über einen Aktionskarten-Mechanismus seinen Zoo verwaltet, um am Ende die höchste Attraktivität und den größten Beitrag zum Artenschutz zu leisten.</p>' },
+            { name: 'Architects of the West Kingdom', category: 'Strategiespiel', age: '12+', minAge: 12, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '60-80 Min.', minDuration: 60, maxDuration: 80, description: '<h3>Ziel des Spiels:</h3><p>Als königliche Architekten wetteifert ihr darum, den König zu beeindrucken, indem ihr verschiedene Wahrzeichen im ganzen Reich errichtet.</p><h3>Spielablauf:</h3><p>Ein Worker-Placement-Spiel mit einem Twist: Je mehr Arbeiter man an einem Ort einsetzt, desto mehr Ressourcen erhält man. Aber Vorsicht, die Mitspieler können eure Arbeiter gefangen nehmen!</p>' },
+            { name: 'Azul', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30-45 Min.', minDuration: 30, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Schmücke als Fliesenleger die Wände des königlichen Palastes von Evora mit wunderschönen maurischen Kacheln (Azulejos).</p><h3>Spielablauf:</h3><p>Spieler wählen reihum Fliesen aus Manufakturen und legen sie auf ihrem Spielertableau ab. Ziel ist es, Reihen zu vervollständigen, um Fliesen an die Palastwand zu versetzen und Punkte zu sammeln.</p>' },
+            { name: 'Big Money', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '25 Min.', minDuration: 25, maxDuration: 25, description: '<h3>Ziel des Spiels:</h3><p>Werde zum reichsten Unternehmer, indem du clever in verschiedene Industrien investierst und deine Konkurrenten ausstichst.</p><h3>Spielablauf:</h3><p>Ein schnelles Wirtschafts- und Zockerspiel mit Würfeln, bei dem man sein Glück herausfordern muss, um das große Geld zu machen.</p>' },
+            { name: 'Bomb Busters', category: 'Kartenspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Entschärfe als Bombenkommando die richtigen Bomben, indem du die passenden Karten ausspielst.</p><h3>Spielablauf:</h3><p>Ein schnelles Kartenspiel, bei dem man clever kombinieren und ein bisschen zocken muss, um nicht die falsche Bombe auszulösen. Wer die meisten Punkte durch entschärfte Bomben sammelt, gewinnt.</p>' },
+            { name: 'Cant Stop', category: 'Familienspiel', age: '7+', minAge: 7, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Sei der erste Spieler, der drei der elf Spalten auf dem Spielplan erobert.</p><h3>Spielablauf:</h3><p>Ein klassisches "Push your luck"-Spiel. Man würfelt und rückt auf den entsprechenden Spalten vor. Man kann so lange weiterwürfeln, wie man möchte, aber wenn man keine gültige Spalte mehr besetzen kann, ist der Zug vorbei und aller Fortschritt dieser Runde ist verloren.</p>' },
+            { name: 'Carcassonne', category: 'Familienspiel', age: '7+', minAge: 7, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '35 Min.', minDuration: 35, maxDuration: 35, description: '<h3>Ziel des Spiels:</h3><p>Erschaffe durch das Legen von Landschaftsplättchen eine mittelalterliche Welt aus Städten, Klöstern, Straßen und Wiesen.</p><h3>Spielablauf:</h3><p>Spieler ziehen und legen ein Landschaftsplättchen. Danach können sie einen "Meeple" auf das gerade gelegte Plättchen setzen, um eine Stadt, Straße oder Wiese zu beanspruchen. Abgeschlossene Gebiete bringen sofort Punkte.</p>' },
+            { name: 'Catan', category: 'Strategiespiel', age: '10+', minAge: 10, players: '3-4', minPlayers: 3, maxPlayers: 4, duration: '75 Min.', minDuration: 75, maxDuration: 75, description: '<h3>Ziel des Spiels:</h3><p>Besiedle die Insel Catan. Baue Siedlungen, Städte und Straßen, um die Herrschaft über die Insel zu erlangen. Wer als Erster 10 Siegpunkte erreicht, gewinnt.</p><h3>Spielablauf:</h3><p>Spieler sammeln Rohstoffe (Holz, Lehm, Getreide, Wolle, Erz), die durch Würfelwürfe bestimmt werden. Mit diesen Rohstoffen bauen sie und handeln untereinander.</p>' },
+            { name: 'Catan Junior', category: 'Kinderspiel', age: '6+', minAge: 6, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Segle als Pirat über die Meere, baue Piratenlager und sammle Ressourcen, um der mächtigste Pirat zu werden.</p><h3>Spielablauf:</h3><p>Eine vereinfachte Version des Klassikers für jüngere Spieler mit einfacheren Regeln und einem kinderfreundlichen Piratenthema.</p>' },
+            { name: 'Challengers!', category: 'Party- & Quizspiel', age: '8+', minAge: 8, players: '1-8', minPlayers: 1, maxPlayers: 8, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Gewinne das größte Capture-the-Flag-Turnier der Welt! Stelle ein einzigartiges Team zusammen und besiege deine Gegner.</p><h3>Spielablauf:</h3><p>Ein interaktives Deck-Management-Spiel. Die Spieler verbessern ihr Kartendeck zwischen den Runden und treten dann in automatischen Duellen gegeneinander an. Wer nach 7 Runden die meisten Fans hat, zieht ins Finale ein.</p>' },
+            { name: 'Codenames', category: 'Party- & Quizspiel', age: '10+', minAge: 10, players: '2-8+', minPlayers: 2, maxPlayers: 8, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Zwei Teams treten gegeneinander an. Die jeweiligen Geheimdienstchefs müssen ihre Agenten finden.</p><h3>Spielablauf:</h3><p>Die Geheimdienstchefs geben ihren Teams Hinweise aus nur einem Wort, um die richtigen Agenten (Wörter) auf dem Tisch zu identifizieren, ohne den Attentäter aufzudecken.</p>' },
+            { name: 'Crime City', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '15-45 Min.', minDuration: 15, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Löst als Detektive gemeinsam Kriminalfälle in einer detailreichen Stadtkarte.</p><h3>Spielablauf:</h3><p>Findet Motive, identifiziert Täter und rekonstruiert den Tathergang, indem ihr auf einem riesigen Wimmelbild-Plan genau hinschaut und den Spuren folgt.</p>' },
+            { name: 'Darwin\'s Journey', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '60-120 Min.', minDuration: 60, maxDuration: 120, description: '<h3>Ziel des Spiels:</h3><p>Erlebe die Reise von Charles Darwin auf den Galapagos-Inseln nach. Erkunde die Inseln und studiere Tierarten.</p><h3>Spielablauf:</h3><p>Ein Worker-Placement-Spiel, bei dem Spieler ihre Forscher über die Inseln bewegen, Proben sammeln, Ziele erfüllen und ihre Erkenntnisse veröffentlichen, um Siegpunkte zu sammeln.</p>' },
+            { name: 'Das große Dalmuti', category: 'Kartenspiel', age: '8+', minAge: 8, players: '4-8', minPlayers: 4, maxPlayers: 8, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Werde so schnell wie möglich deine Karten los, um in der sozialen Hierarchie aufzusteigen und der nächste Große Dalmuti zu werden.</p><h3>Spielablauf:</h3><p>Ein schnelles und chaotisches Stichspiel, bei dem der Rang der Spieler ihre Position am Tisch und ihre Privilegien bestimmt.</p>' },
+            { name: 'Die drei ??? und der Feuerdiamant', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Helft den drei Detektiven Justus, Peter und Bob dabei, den gestohlenen Feuerdiamanten wiederzufinden.</p><h3>Spielablauf:</h3><p>Ein kooperatives Würfel- und Laufspiel, bei dem man Hinweisen folgt und Rätsel löst, um den Fall zu knacken.</p>' },
+            { name: 'Die Legenden von Andor: Die letzte Hoffnung', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Führt die Helden in den Süden Andors, um das Land vor den Skeletten zu verteidigen, die aus der Erde steigen.</p><h3>Spielablauf:</h3><p>Die zweite große Erweiterung für "Die Legenden von Andor". Eine düstere Kampagne mit neuen Herausforderungen und einem mächtigen Endgegner.</p>' },
+            { name: 'Die Legenden von Andor: Die Reise in den Norden', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Reist als Helden in den Norden, um eine neue Bedrohung abzuwehren.</p><h3>Spielablauf:</h3><p>Die erste große Erweiterung für "Die Legenden von Andor". Erlebt neue Legenden, trefft neue Verbündete und stellt euch neuen Gefahren auf See.</p>' },
+            { name: 'Die magischen Schlüssel', category: 'Kinderspiel', age: '6+', minAge: 6, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '20-30 Min.', minDuration: 20, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Findet die passenden magischen Schlüssel, um Schatztruhen zu öffnen.</p><h3>Spielablauf:</h3><p>Ein Memory-Spiel mit einem cleveren Mechanismus, bei dem die Schlüssel magnetisch sind und nur in die richtigen Schlösser passen.</p>' },
+            { name: 'Dixit', category: 'Party- & Quizspiel', age: '8+', minAge: 8, players: '3-8', minPlayers: 3, maxPlayers: 8, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Sammle die meisten Punkte durch kreative Bildbeschreibungen und cleveres Raten.</p><h3>Spielablauf:</h3><p>Ein Spieler gibt einen Hinweis zu einer seiner surrealen Bildkarten. Die anderen wählen eine passende Karte aus ihrer Hand. Alle Karten werden gemischt und aufgedeckt. Wer rät, welche Karte die des Erzählers war?</p>' },
+            { name: 'Dog', category: 'Familienspiel', age: '8+', minAge: 8, players: '4-6', minPlayers: 4, maxPlayers: 6, duration: '30-45 Min.', minDuration: 30, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Bringe als Team deine vier Murmeln ins Ziel.</p><h3>Spielablauf:</h3><p>Statt Würfeln werden Karten verwendet, um die Figuren zu bewegen. Ein taktisches Partnerspiel, das an "Mensch ärgere dich nicht" erinnert, aber viel gemeiner ist.</p>' },
+            { name: 'Dominion', category: 'Strategiespiel', age: '13+', minAge: 13, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Baue das mächtigste Königreich, indem du das beste Kartendeck zusammenstellst.</p><h3>Spielablauf:</h3><p>Das Pionierspiel des Deckbau-Genres. Alle Spieler starten mit einem identischen, kleinen Deck. In jedem Zug kaufen sie neue Karten aus einer gemeinsamen Auslage und optimieren so ihr Deck, um immer mächtigere Züge zu machen.</p>' },
+            { name: 'Dorf Romantik', category: 'Familienspiel', age: '8+', minAge: 8, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '30-60 Min.', minDuration: 30, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Erschafft gemeinsam eine wunderschöne Landschaft aus sechseckigen Plättchen.</p><h3>Spielablauf:</h3><p>Ein kooperatives Legespiel. Spieler decken reihum Plättchen auf und legen sie an, um Aufträge der Bevölkerung zu erfüllen. Über eine Kampagne können nach und nach neue Plättchen und schwierigere Aufträge freigeschaltet werden.</p>' },
+            { name: 'Dorfromantik: Die Kirschblüten-Erweiterung', category: 'Erweiterung', age: '8+', minAge: 8, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '30-60 Min.', minDuration: 30, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Bringt mit Kirschbäumen und neuen Aufträgen noch mehr Schönheit und Abwechslung in eure Dorfromantik-Landschaft.</p><h3>Spielablauf:</h3><p>Diese Mini-Erweiterung fügt neue Plättchen mit Kirschbäumen und passende Aufträge hinzu. Wenn ein Kirschbaum-Plättchen gezogen wird, könnt ihr versuchen, die neuen, speziellen Aufträge zu erfüllen, um zusätzliche Punkte für eure gemeinsame Highscore-Jagd zu sammeln.</p>' },
+            { name: 'Drop It', category: 'Geschicklichkeitsspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Lasst eure Formen in den senkrechten Spielplan fallen und sammelt Punkte.</p><h3>Spielablauf:</h3><p>Aber Achtung: Formen dürfen weder ihre eigene Farbe noch ihre eigene Form in den angrenzenden Bereichen berühren. Wer am höchsten landet und die meisten Boni sammelt, gewinnt.</p>' },
+            { name: 'Dune Uprising', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '60-120 Min.', minDuration: 60, maxDuration: 120, description: '<h3>Ziel des Spiels:</h3><p>Kämpfe um die Kontrolle über den Wüstenplaneten Arrakis. Führe eines der großen Häuser an, schmiede Allianzen und nutze Intrigen, um das wertvolle Spice zu beherrschen.</p><h3>Spielablauf:</h3><p>Eine Mischung aus Deckbau und Worker-Placement mit neuen Elementen wie Spionen und Sandwürmern.</p>' },
+            { name: 'Erde', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '45-90 Min.', minDuration: 45, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Erschaffe ein sich selbst erhaltendes Ökosystem. Pflanze Inseln, Kontinente und züchte eine vielfältige Flora und Fauna, um Punkte zu sammeln.</p><h3>Spielablauf:</h3><p>Ein komplexes Engine-Building-Spiel, bei dem die Aktionen eines Spielers auch Boni für die anderen auslösen können.</p>' },
+            { name: 'Fang den Hut!', category: 'Kinderspiel', age: '4+', minAge: 4, players: '2-6', minPlayers: 2, maxPlayers: 6, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Bringe deine Hütchen sicher ins Ziel.</p><h3>Spielablauf:</h3><p>Unterwegs kannst du die Hütchen deiner Mitspieler schlagen und unter deinem eigenen verstecken. Ein Würfelspiel-Klassiker für die ganze Familie.</p>' },
+            { name: 'Herr der Ringe: Das kooperative Stichspiel', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '3-6', minPlayers: 3, maxPlayers: 6, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Besiegt als Gemeinschaft Sauron, indem ihr die Reise nach Mordor erfolgreich abschließt. Ihr müsst eine bestimmte Anzahl an Stichen gewinnen, um voranzukommen.</p><h3>Spielablauf:</h3><p>Ein kooperatives Stichspiel. In jeder Runde spielt ihr Karten aus, um Stiche zu gewinnen und auf dem Spielplan vorzurücken. Aber Vorsicht: Jeder gewonnene Stich kann auch Sauron auf seinem Weg voranbringen. Ihr müsst clever kommunizieren und entscheiden, welche Stiche ihr braucht und welche ihr dem Bösen überlassen könnt.</p>' },
+            { name: 'High Score', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Erfülle in jeder Runde die wechselnden Bedingungen einer "Challenge"-Karte mit deinen Würfeln, um über sieben Runden die meisten Siegpunkte zu sammeln.</p><h3>Spielablauf:</h3><p>Ein schnelles Würfelspiel, bei dem man in jeder Runde versucht, den Highscore der Mitspieler zu knacken.</p>' },
+            { name: 'Iki', category: 'Strategiespiel', age: '14+', minAge: 14, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Erlebe ein Jahr im alten Edo (dem heutigen Tokio). Engagiere Handwerker, sorge für das Wohl der Bevölkerung und versuche, der angesehenste Bürger zu sein.</p><h3>Spielablauf:</h3><p>Ein strategisches Rondell-Spiel, bei dem man seine Figur über einen Marktplatz bewegt, um Aktionen auszuführen und Handwerker anzuheuern.</p>' },
+            { name: 'Karak', category: 'Familienspiel', age: '7+', minAge: 7, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Erkunde als einer von sechs Helden die Katakomben der Burg Karak. Bekämpfe Monster, sammle Schätze und sei der Erste, der den Drachen besiegt.</p><h3>Spielablauf:</h3><p>Ein einfacher Dungeon-Crawler. Spieler decken neue Gänge auf, kämpfen per Würfelwurf gegen Monster und rüsten ihren Helden mit Waffen und Zaubern aus.</p>' },
+            { name: 'Lacrimosa', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '90 Min.', minDuration: 90, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Als Mäzene von Wolfgang Amadeus Mozart blickt ihr auf sein Leben zurück und helft seiner Witwe, sein letztes Werk, das Requiem, zu vollenden.</p><h3>Spielablauf:</h3><p>Ein strategisches Spiel mit einem einzigartigen Kartenmechanismus, bei dem Karten entweder für Aktionen oder für zukünftiges Einkommen ausgespielt werden.</p>' },
+            { name: 'Living Forest', category: 'Familienspiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '40 Min.', minDuration: 40, maxDuration: 40, description: '<h3>Ziel des Spiels:</h3><p>Spiele als Naturgeist, der versucht, den Wald vor den Flammen des Onibi zu retten.</p><h3>Spielablauf:</h3><p>Ein "Push your luck"- und Engine-Building-Spiel. Decke Karten auf, um Aktionen zu erhalten, aber höre rechtzeitig auf, bevor du zu viele Einzelgänger-Symbole aufdeckst.</p>' },
+            { name: 'Men at Work', category: 'Geschicklichkeitsspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '30-45 Min.', minDuration: 30, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Baut als Bauarbeiter gemeinsam an einem Wolkenkratzer. Wer die meisten Sicherheitszertifikate sammelt, wird Mitarbeiter des Monats.</p><h3>Spielablauf:</h3><p>Stapelt Träger und Arbeiter nach den Vorgaben von Baukarten, aber passt auf, dass nichts einstürzt!</p>' },
+            { name: 'MicroMacro: Crime City', category: 'Kooperatives Spiel', age: '12+', minAge: 12, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '15-45 Min.', minDuration: 15, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Löst als Team knifflige Kriminalfälle in der wuseligen Stadt Crime City. Findet die Motive, die Täter und die Tatorte, indem ihr den Spuren auf einem riesigen Stadtplan folgt.</p><h3>Spielablauf:</h3><p>Das Spiel besteht aus einem riesigen Wimmelbild-Poster und einem Satz Karten für jeden Fall. Die erste Karte gibt den Fall vor. Die Spieler müssen dann gemeinsam auf dem Plan nach Hinweisen suchen, um die nächste Frage auf der nächsten Karte zu beantworten. So hangelt man sich von Detail zu Detail, um den gesamten Tathergang zu rekonstruieren.</p>' },
+            { name: 'My Dorf', category: 'Familienspiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Baue dein eigenes kleines Dorf.</p><h3>Spielablauf:</h3><p>Ein Würfel- und Zeichenspiel ("Roll & Write"), bei dem du Gebäude und Wege auf deinem eigenen Plan einzeichnest, um Punkte zu sammeln.</p>' },
+            { name: 'Newton', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '90 Min.', minDuration: 90, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Als junge Wissenschaftler im 18. Jahrhundert reist ihr durch Europa, studiert an Universitäten und führt Experimente durch, um in die Fußstapfen von Isaac Newton zu treten.</p><h3>Spielablauf:</h3><p>Ein komplexes Engine-Building- und Hand-Management-Spiel.</p>' },
+            { name: 'Nuroshima', category: 'Strategiespiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Erschaffe eine Insel und besiedle sie.</p><h3>Spielablauf:</h3><p>Ein Plättchenlegespiel mit einem Hauch von Engine-Building, bei dem du deine Insel erweiterst und versuchst, die wertvollsten Kombinationen zu erzielen.</p>' },
+            { name: 'Odin', category: 'Kartenspiel', age: '8+', minAge: 8, players: '2-6', minPlayers: 2, maxPlayers: 6, duration: '25 Min.', minDuration: 25, maxDuration: 25, description: '<h3>Ziel des Spiels:</h3><p>Werde als Erster deine Handkarten los.</p><h3>Spielablauf:</h3><p>Ein wildes Kartenspiel im Stil von Mau-Mau, aber mit Wikingern! Lege Karten ab, die entweder in Farbe oder Wert passen, und nutze die Sonderfähigkeiten der Wikinger, um deine Mitspieler zu ärgern.</p>' },
+            { name: 'PARKS', category: 'Familienspiel', age: '10+', minAge: 10, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '30-60 Min.', minDuration: 30, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Sammle als Wanderer über vier Jahreszeiten hinweg die meisten Siegpunkte, indem du wunderschöne Nationalparks besuchst, Fotos schießt und persönliche Ziele erfüllst.</p><h3>Spielablauf:</h3><p>Spieler bewegen ihre beiden Wanderer über einen Pfad, der in jeder Runde neu und länger wird. Die Felder des Pfades gewähren Ressourcen (Erinnerungen), mit denen man Parks besuchen (kaufen) oder Ausrüstung erwerben kann. Am Ende jeder Jahreszeit kann man Fotos machen, die ebenfalls Punkte bringen. Das Spiel besticht durch seine wunderschöne Gestaltung und entspannte Atmosphäre.</p>' },
+            { name: 'Pixies', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Hilf den Pixies, Edelsteine zu sammeln.</p><h3>Spielablauf:</h3><p>Ein abstraktes Strategiespiel, bei dem du durch geschicktes Bewegen deiner Figur Edelsteine einsammelst und versuchst, die Pläne deiner Gegner zu durchkreuzen.</p>' },
+            { name: 'Rapido', category: 'Geschicklichkeitsspiel', age: '6+', minAge: 6, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '10 Min.', minDuration: 10, maxDuration: 10, description: '<h3>Ziel des Spiels:</h3><p>Schnappe dir so schnell wie möglich die richtigen Kugeln vom Tisch.</p><h3>Spielablauf:</h3><p>Ein hektisches Reaktionsspiel für die ganze Familie, bei dem Würfel vorgeben, welche Farbkugeln gesammelt werden müssen.</p>' },
+            { name: 'Root', category: 'Strategiespiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Vier völlig unterschiedliche Fraktionen kämpfen um die Herrschaft im Wald.</p><h3>Spielablauf:</h3><p>Jede Fraktion spielt sich komplett anders und hat eigene Siegbedingungen. Ein asymmetrisches Kriegs- und Abenteuerspiel, bei dem man die Stärken seiner Fraktion perfekt ausspielen muss.</p>' },
+            { name: 'Schwingenschlag', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '40-70 Min.', minDuration: 40, maxDuration: 70, description: '<h3>Ziel des Spiels:</h3><p>Locke als Vogelkundler die schönsten Vögel in dein Naturschutzgebiet.</p><h3>Spielablauf:</h3><p>Jeder Vogel bringt neue Fähigkeiten und hilft dir, eine mächtige Kombinations-Engine aufzubauen, um Eier zu legen, Futter zu sammeln und neue Vögel anzulocken.</p>' },
+            { name: 'Seti', category: 'Strategiespiel', age: '12+', minAge: 12, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60 Min.', minDuration: 60, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Erforsche das Sonnensystem und suche nach außerirdischem Leben.</p><h3>Spielablauf:</h3><p>Baue dein Raumschiff aus, entwickle Technologien und sende Signale ins All, um als erster Kontakt aufzunehmen.</p>' },
+            { name: 'Sky Team', category: '2-Spieler-Spiel', age: '12+', minAge: 12, players: '2', minPlayers: 2, maxPlayers: 2, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Landet als Team aus Pilot und Co-Pilot ein Flugzeug sicher auf verschiedenen Flughäfen der Welt.</p><h3>Spielablauf:</h3><p>Ein kooperatives Würfel-Platzierungsspiel nur für zwei Personen. Ihr müsst eure Würfel so auf dem Cockpit-Tableau platzieren, dass ihr das Flugzeug ausbalanciert, die Geschwindigkeit kontrolliert und die Landung vorbereitet, ohne direkt miteinander zu reden.</p>' },
+            { name: 'Smart 10 (History)', category: 'Party- & Quizspiel', age: '14+', minAge: 14, players: '2-8', minPlayers: 2, maxPlayers: 8, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Sammle die meisten Punkte durch richtiges Beantworten von Quizfragen.</p><h3>Spielablauf:</h3><p>Zu jeder Frage gibt es 10 mögliche Antworten. Wer an der Reihe ist, kann eine Antwort geben. Ist sie richtig, bekommt man einen Punkt. Aber Vorsicht, wer eine falsche Antwort gibt, verliert alle Punkte dieser Runde.</p>' },
+            { name: 'Smart 10 Family', category: 'Party- & Quizspiel', age: '10+', minAge: 10, players: '2-8', minPlayers: 2, maxPlayers: 8, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Sammle die meisten Punkte durch richtiges Beantworten von Quizfragen.</p><h3>Spielablauf:</h3><p>Die Familienausgabe des beliebten Quizspiels. Zu jeder Frage gibt es 10 Antworten. Wer traut sich, eine Antwort zu geben? Wer eine falsche Antwort gibt, scheidet für die Runde aus.</p>' },
+            { name: 'Spiel des Wissens', category: 'Party- & Quizspiel', age: '10+', minAge: 10, players: '2-6', minPlayers: 2, maxPlayers: 6, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Beantworte Fragen aus verschiedenen Wissensgebieten, um auf dem Spielplan vorzurücken und als Erster das Ziel zu erreichen.</p><h3>Spielablauf:</h3><p>Ein Quizspiel-Klassiker, bei dem man durch richtiges Antworten Wissenssteine sammelt.</p>' },
+            { name: 'Stille Post Extrem', category: 'Party- & Quizspiel', age: '12+', minAge: 12, players: '4-8', minPlayers: 4, maxPlayers: 8, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Hier gibt es keine Gewinner, nur Lachtränen! Ziel ist es, die absurden Verwandlungen von Wörtern zu Zeichnungen und wieder zu Wörtern zu erleben.</p><h3>Spielablauf:</h3><p>Jeder Spieler erhält einen Block, schreibt ein geheimes Wort, gibt den Block weiter, der nächste Spieler zeichnet das Wort, gibt weiter, der nächste rät die Zeichnung und schreibt das Wort auf, und so weiter. Die Ergebnisse sind meistens absurd und witzig.</p>' },
+            { name: 'Stratego', category: 'Strategiespiel', age: '8+', minAge: 8, players: '2', minPlayers: 2, maxPlayers: 2, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Erobere die Fahne deines Gegners.</p><h3>Spielablauf:</h3><p>Stelle deine Armee aus verschiedenen Rängen geheim auf und versuche, die Aufstellung deines Gegners zu durchschauen und seine Fahne zu finden. Ein Deduktions- und Bluffspiel.</p>' },
+            { name: 'Strike', category: 'Geschicklichkeitsspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Wirf deine Würfel in die Arena und versuche, Paare zu bilden. Wer als letzter noch Würfel übrig hat, gewinnt.</p><h3>Spielablauf:</h3><p>Ein einfaches, aber süchtig machendes Würfelspiel, das an Gladiatorenkämpfe erinnert.</p>' },
+            { name: 'Survive', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '45-60 Min.', minDuration: 45, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Rette deine Meeples von einer sinkenden Insel!</p><h3>Spielablauf:</h3><p>Bringe sie sicher an Land, bevor die Insel untergeht und Haie, Wale und Seeungeheuer sie erwischen. Ein gemeines Spiel, bei dem man auch die Monster steuert, um die Mitspieler zu ärgern.</p>' },
+            { name: 'Takenoko', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Pflege den kaiserlichen Bambusgarten. Erfülle geheime Aufträge, um Punkte zu sammeln.</p><h3>Spielablauf:</h3><p>Bewässere den Garten, züchte Bambus in drei Farben und füttere den heiligen Panda. Ein wunderschönes Spiel mit einfachen Regeln und taktischer Tiefe.</p>' },
+            { name: 'Terraforming Mars', category: 'Strategiespiel', age: '12+', minAge: 12, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '120 Min.', minDuration: 120, maxDuration: 120, description: '<h3>Ziel des Spiels:</h3><p>Als riesige Konzerne wetteifert ihr darum, den Mars bewohnbar zu machen.</p><h3>Spielablauf:</h3><p>Erhöht die Temperatur, den Sauerstoffgehalt und schafft Ozeane, während ihr durch das Ausspielen von Projektkarten euren eigenen Konzern zum Erfolg führt und eine mächtige Engine aufbaut.</p>' },
+            { name: 'That\'s Not a Hat', category: 'Party- & Quizspiel', age: '8+', minAge: 8, players: '3-8', minPlayers: 3, maxPlayers: 8, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Sammle am Ende die wenigsten Minuspunkte, indem du gut bluffst und dir merkst, welche Geschenke im Umlauf sind.</p><h3>Spielablauf:</h3><p>Ein witziges Bluff- und Gedächtnisspiel. Du bekommst ein Geschenk und musst es weitergeben, indem du sagst, was es ist. Das Problem: Du musst dir merken, was du bekommen hast, auch wenn es schon mehrmals das Geschenk gewechselt hat.</p>' },
+            { name: 'The Castles of Burgundy', category: 'Strategiespiel', age: '12+', minAge: 12, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30-90 Min.', minDuration: 30, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Erweitere als Aristokrat im Burgund des 15. Jahrhunderts dein Fürstentum.</p><h3>Spielablauf:</h3><p>Ein Würfel- und Plättchenlegespiel. Die Würfelaugen geben vor, welche Aktionen man ausführen oder welche Plättchen man nehmen kann, um sein eigenes Reich auszubauen und Siegpunkte zu generieren.</p>' },
+            { name: 'The Game', category: 'Kooperatives Spiel', age: '8+', minAge: 8, players: '1-5', minPlayers: 1, maxPlayers: 5, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Besiegt gemeinsam das Spiel! Legt alle 98 Karten auf vier Stapel ab.</p><h3>Spielablauf:</h3><p>Zwei Stapel müssen aufsteigend (1-99), zwei absteigend (100-2) belegt werden. Kommunikation ist stark eingeschränkt, ihr müsst die Züge eurer Mitspieler erahnen, um alle Karten loszuwerden.</p>' },
+            { name: 'The Goonies', category: 'Thematisches Spiel', age: '12+', minAge: 12, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '60 Min.', minDuration: 60, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Erlebt das Abenteuer des Filmklassikers. Spielt als die Goonies und findet den Schatz des Einäugigen Willy.</p><h3>Spielablauf:</h3><p>Ein Spieler übernimmt die Rolle des Spielleiters und steuert die Fratellis, während die anderen kooperativ Fallen überwinden und Rätsel lösen.</p>' },
+            { name: 'Trekking the World', category: 'Familienspiel', age: '10+', minAge: 10, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '30-60 Min.', minDuration: 30, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Reise um die Welt und besuche die berühmtesten Orte und Wunder der Welt.</p><h3>Spielablauf:</h3><p>Sammle Karten, um zu den verschiedenen Orten zu reisen und Souvenirs zu sammeln. Wer am Ende die wertvollsten Touren abgeschlossen hat, gewinnt.</p>' },
+            { name: 'Tuscany', category: 'Strategiespiel', age: '14+', minAge: 14, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '60-120 Min.', minDuration: 60, maxDuration: 120, description: '<h3>Ziel des Spiels:</h3><p>Die ultimative Erweiterung für Viticulture. Erweitere dein Weingut, um das prestigeträchtigste Weingut der Toskana zu werden.</p><h3>Spielablauf:</h3><p>Fügt dem Grundspiel neue Module hinzu, wie ein erweitertes Spielbrett, Spezialarbeiter und neue Gebäudekarten, die das Spiel komplexer und abwechslungsreicher machen.</p>' },
+            { name: 'Vampir', category: 'Kinderspiel', age: '6+', minAge: 6, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Sammle Knoblauch, um dich vor dem Vampir zu schützen, der durch das Schloss geistert.</p><h3>Spielablauf:</h3><p>Ein lustiges Kinderspiel mit einem dreidimensionalen Schlossturm, in den der Vampir geworfen wird und zufällig wieder herauskommt.</p>' },
+            { name: 'Viticulture World', category: 'Kooperatives Spiel', age: '14+', minAge: 14, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '60-120 Min.', minDuration: 60, maxDuration: 120, description: '<h3>Ziel des Spiels:</h3><p>Arbeitet als Team zusammen, um das Ansehen eures Weinguts auf der ganzen Welt zu steigern.</p><h3>Spielablauf:</h3><p>Eine kooperative Erweiterung für Viticulture. Erfüllt Aufträge auf verschiedenen Kontinenten, jeder mit eigenen Regeln und Herausforderungen, um gemeinsam das Spiel zu gewinnen.</p>' },
+            { name: 'Wanderlust', category: 'Familienspiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '45 Min.', minDuration: 45, maxDuration: 45, description: '<h3>Ziel des Spiels:</h3><p>Plane und unternimm die perfekte Reise. Sammle Reisepläne, packe deinen Koffer und sei der Erste, der alle seine Ziele erreicht.</p><h3>Spielablauf:</h3><p>Ein Legespiel über die Freude am Reisen, bei dem man Routen plant und Sehenswürdigkeiten besucht.</p>' },
+            { name: 'Zug um Zug', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '30-60 Min.', minDuration: 30, maxDuration: 60, description: '<h3>Ziel des Spiels:</h3><p>Baue ein Eisenbahnnetz quer durch die USA. Sammle Punkte, indem du Bahnstrecken zwischen Städten beanspruchst.</p><h3>Spielablauf:</h3><p>Erfülle geheime Zielkarten, die dir vorgeben, welche Städte du verbinden musst. Dazu sammelt man farbige Wagenkarten, um die entsprechenden Strecken auf dem Spielplan zu beanspruchen.</p>' }
+        ];
+        games.sort((a, b) => a.name.localeCompare(b.name)); // Sortiert die Spiele alphabetisch
+
+        // --- ANWENDUNGSLOGIK ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const playersFilter = document.getElementById('players-filter');
+            const durationFilter = document.getElementById('duration-filter');
+            const tableBody = document.getElementById('game-table-body');
+            const noResultsDiv = document.getElementById('no-results');
+            const modalOverlay = document.getElementById('game-modal-overlay');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            function populateCategories() {
+                const categories = [...new Set(games.map(game => game.category))];
+                categories.sort();
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            }
+
+            function renderTable(filteredGames) {
+                tableBody.innerHTML = '';
+                noResultsDiv.classList.toggle('hidden', filteredGames.length > 0);
+
+                filteredGames.forEach(game => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-700/50 transition-colors duration-200 cursor-pointer';
+                    row.innerHTML = `
+                        <td class="p-4 font-medium text-white">${game.name}</td>
+                        <td class="p-4 text-gray-300">${game.category}</td>
+                        <td class="p-4 text-gray-300 hidden sm:table-cell">${game.age}</td>
+                        <td class="p-4 text-gray-300 hidden md:table-cell">${game.players}</td>
+                        <td class="p-4 text-gray-300 hidden sm:table-cell">${game.duration}</td>
+                    `;
+                    row.addEventListener('click', () => showModal(game));
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function showModal(game) {
+                document.getElementById('modal-title').textContent = game.name;
+                document.getElementById('modal-category').textContent = game.category;
+                document.getElementById('modal-age').textContent = game.age;
+                document.getElementById('modal-players').textContent = game.players;
+                document.getElementById('modal-duration').textContent = game.duration;
+                document.getElementById('modal-description').innerHTML = game.description || '<p>Für dieses Spiel ist noch keine Beschreibung verfügbar.</p>';
+                
+                modalOverlay.classList.remove('hidden', 'modal-leave', 'modal-leave-active');
+                modalOverlay.classList.add('modal-enter');
+                requestAnimationFrame(() => {
+                    modalOverlay.classList.add('modal-enter-active');
+                });
+            }
+
+            function hideModal() {
+                 modalOverlay.classList.remove('modal-enter-active');
+                 modalOverlay.classList.add('modal-leave-active');
+                 setTimeout(() => {
+                     modalOverlay.classList.add('hidden');
+                 }, 150);
+            }
+
+            function filterAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value;
+                const selectedPlayers = parseInt(playersFilter.value, 10);
+                const selectedDuration = parseInt(durationFilter.value, 10);
+
+                const filteredGames = games.filter(game => {
+                    const nameMatch = game.name.toLowerCase().includes(searchTerm);
+                    const categoryMatch = selectedCategory === 'all' || game.category === selectedCategory;
+                    
+                    let playersMatch = true;
+                    if (selectedPlayers > 0) {
+                        if (selectedPlayers < 7) {
+                            playersMatch = game.minPlayers <= selectedPlayers && game.maxPlayers >= selectedPlayers;
+                        } else { // Für "7+ Spieler"
+                            playersMatch = game.maxPlayers >= 7;
+                        }
+                    }
+
+                    const durationMatch = selectedDuration === 0 || game.maxDuration <= selectedDuration;
+                    
+                    return nameMatch && categoryMatch && playersMatch && durationMatch;
+                });
+                renderTable(filteredGames);
+            }
+
+            [searchInput, categoryFilter, playersFilter, durationFilter].forEach(el => {
+                el.addEventListener('input', filterAndRender);
+                el.addEventListener('change', filterAndRender);
+            });
+            
+            modalCloseBtn.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) {
+                    hideModal();
+                }
+            });
+
+            populateCategories();
+            renderTable(games);
+        });
+    </script>
+</body>
+</html>
