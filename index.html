@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meine Private Spielesammlung - Anzahl: 138 Titel (August 2025)</title>
+    <title>Meine Private Spielesammlung</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -58,6 +58,11 @@
             <h1 class="text-4xl sm:text-5xl font-bold text-white mb-2">Meine Private Spielesammlung</h1>
             <p class="text-lg text-gray-400">Eine digitale Übersicht meiner Brett- und Kartenspiele.</p>
         </header>
+
+        <!-- Statistik-Bereich -->
+        <div id="game-stats" class="mb-8 text-center text-gray-400 bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+            <!-- Statistiken werden hier per JavaScript eingefügt -->
+        </div>
 
         <div class="bg-gray-800 p-4 rounded-lg mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sticky top-4 z-10 shadow-lg border border-gray-700">
             <div class="lg:col-span-2">
@@ -157,7 +162,7 @@
             { name: 'Beat That!', category: 'Party- & Quizspiel', age: '9+', minAge: 9, players: '2-8', minPlayers: 2, maxPlayers: 8, duration: '40-90 Min.', minDuration: 40, maxDuration: 90, description: '<h3>Ziel des Spiels:</h3><p>Gewinne die meisten Punkte, indem du verrückte Geschicklichkeits-Herausforderungen meisterst.</p><h3>Spielablauf:</h3><p>Eine Sammlung von 160 witzigen und absurden Aufgaben. Die Spieler wetten auf ihre eigene Fähigkeit, eine Herausforderung zu meistern (z.B. Becher mit den Ellbogen stapeln), bevor sie es versuchen. Wer erfolgreich ist, gewinnt Punkte.</p>' },
             { name: 'Big Money', category: 'Familienspiel', age: '8+', minAge: 8, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '25 Min.', minDuration: 25, maxDuration: 25, description: '<h3>Ziel des Spiels:</h3><p>Werde zum reichsten Unternehmer, indem du clever in verschiedene Industrien investierst und deine Konkurrenten ausstichst.</p><h3>Spielablauf:</h3><p>Ein schnelles Wirtschafts- und Zockerspiel mit Würfeln, bei dem man sein Glück herausfordern muss, um das große Geld zu machen.</p>' },
             { name: 'Blütenreich', category: 'Familienspiel', age: '8+', minAge: 8, players: '1-6', minPlayers: 1, maxPlayers: 6, duration: '20 Min.', minDuration: 20, maxDuration: 20, description: '<h3>Ziel des Spiels:</h3><p>Gestalte den schönsten Garten, indem du Würfelergebnisse clever auf deinem Gartenplan einträgst und so wertvolle Blumenbeete und Statuen anlegst.</p><h3>Spielablauf:</h3><p>Ein "Roll & Write"-Spiel. Jede Runde werden Würfel geworfen, die allen Spielern zur Verfügung stehen. Die Spieler wählen Würfelkombinationen, um auf ihrem Zettel Blumen zu malen und Punkte für verschiedene Wertungen zu sammeln.</p>' },
-            { name: 'Bomb Busters', category: 'Kooperatives Spiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Entschärfe als Bombenkommando die richtigen Bomben, indem du die passenden Karten ausspielst.</p><h3>Spielablauf:</h3><p>Ein schnelles Kartenspiel, bei dem man clever kombinieren und ein bisschen zocken muss, um nicht die falsche Bombe auszulösen. Wer die meisten Punkte durch entschärfte Bomben sammelt, gewinnt.</p>' },
+            { name: 'Bomb Busters', category: 'Kooperatives Spiel', age: '8+', minAge: 8, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '15 Min.', minDuration: 15, maxDuration: 15, description: '<h3>Ziel des Spiels:</h3><p>Entschärft als Team alle Bomben, bevor die Zeit abläuft.</p><h3>Spielablauf:</h3><p>Ein kooperatives Kartenspiel, bei dem man clever kombinieren und kommunizieren muss, um die richtigen Karten auszuspielen und die Bomben zu entschärfen. Jede Runde wird der Druck größer!</p>' },
             { name: 'Cant Stop', category: 'Familienspiel', age: '7+', minAge: 7, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, description: '<h3>Ziel des Spiels:</h3><p>Sei der erste Spieler, der drei der elf Spalten auf dem Spielplan erobert.</p><h3>Spielablauf:</h3><p>Ein klassisches "Push your luck"-Spiel. Man würfelt und rückt auf den entsprechenden Spalten vor. Man kann so lange weiterwürfeln, wie man möchte, aber wenn man keine gültige Spalte mehr besetzen kann, ist der Zug vorbei und aller Fortschritt dieser Runde ist verloren.</p>' },
             { name: 'Carcassonne', category: 'Familienspiel', age: '7+', minAge: 7, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '35 Min.', minDuration: 35, maxDuration: 35, description: '<h3>Ziel des Spiels:</h3><p>Erschaffe durch das Legen von Landschaftsplättchen eine mittelalterliche Welt aus Städten, Klöstern, Straßen und Wiesen.</p><h3>Spielablauf:</h3><p>Spieler ziehen und legen ein Landschaftsplättchen. Danach können sie einen "Meeple" auf das gerade gelegte Plättchen setzen, um eine Stadt, Straße oder Wiese zu beanspruchen. Abgeschlossene Gebiete bringen sofort Punkte.</p>' },
             { name: 'Cat in the Box', category: 'Kartenspiel', age: '10+', minAge: 10, players: '2-5', minPlayers: 2, maxPlayers: 5, duration: '20-40 Min.', minDuration: 20, maxDuration: 40, description: '<h3>Ziel des Spiels:</h3><p>Gewinne die meisten Punkte, indem du Stiche gewinnst und deine Vorhersagen erfüllst.</p><h3>Spielablauf:</h3><p>Ein einzigartiges Stichspiel, bei dem die Karten keine Farbe haben! Wenn du eine Karte ausspielst, deklarierst du ihre Farbe (rot, gelb, blau oder grün) und markierst diese auf einem zentralen Tableau. Die Krux: Jede Zahlen-Farb-Kombination darf nur einmal im Spiel vorkommen, was zu paradoxen Situationen führen kann!</p>' },
@@ -327,6 +332,28 @@
                 });
             }
 
+            function renderStats() {
+                const statsContainer = document.getElementById('game-stats');
+                const totalGames = games.length;
+
+                const categoryCounts = games.reduce((acc, game) => {
+                    acc[game.category] = (acc[game.category] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const sortedCategories = Object.keys(categoryCounts).sort();
+
+                let statsHTML = `<p class="text-xl mb-4">Gesamtanzahl der Spiele: <span class="font-bold text-white">${totalGames}</span></p>`;
+                statsHTML += `<div class="flex flex-wrap justify-center gap-x-4 gap-y-2">`;
+
+                for (const category of sortedCategories) {
+                    statsHTML += `<span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">${category}: ${categoryCounts[category]}</span>`;
+                }
+
+                statsHTML += `</div>`;
+                statsContainer.innerHTML = statsHTML;
+            }
+
             function renderTable(filteredGames) {
                 tableBody.innerHTML = '';
                 noResultsDiv.classList.toggle('hidden', filteredGames.length > 0);
@@ -408,6 +435,7 @@
             });
 
             populateCategories();
+            renderStats();
             renderTable(games);
         });
     </script>
