@@ -198,6 +198,7 @@
             { name: 'Die Legenden von Andor: Die Reise in den Norden', category: 'Kooperatives Spiel', age: '10+', minAge: 10, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '60-90 Min.', minDuration: 60, maxDuration: 90, image: 'images/andordiereiseindennorden.jpg', description: '<h3>Ziel des Spiels:</h3><p>Reist als Helden in den Norden, um eine neue Bedrohung abzuwehren.</p><h3>Spielablauf:</h3><p>Die erste große Erweiterung für "Die Legenden von Andor". Erlebt neue Legenden, trefft neue Verbündete und stellt euch neuen Gefahren auf See.</p>' },
             { name: 'Die magischen Schlüssel', category: 'Kinderspiel', age: '6+', minAge: 6, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '20-30 Min.', minDuration: 20, maxDuration: 30, image: 'images/diemagischenschluessel.jpg', description: '<h3>Ziel des Spiels:</h3><p>Findet die passenden magischen Schlüssel, um Schatztruhen zu öffnen.</p><h3>Spielablauf:</h3><p>Ein Memory-Spiel mit einem cleveren Mechanismus, bei dem die Schlüssel magnetisch sind und nur in die richtigen Schlösser passen.</p>' },
             { name: 'Die weiße Burg', category: 'Strategiespiel', age: '12+', minAge: 12, players: '1-4', minPlayers: 1, maxPlayers: 4, duration: '80 Min.', minDuration: 80, maxDuration: 80, image: 'images/deweisseburg.jpg', description: '<h3>Ziel des Spiels:</h3><p>Verwalte als Anführer deines Clans Ressourcen, um deine Arbeiter zur Burg Himeji zu schicken und dort Einfluss zu gewinnen.</p><h3>Spielablauf:</h3><p>Ein strategisches Eurogame mit Würfel-Einsetz-Mechanismus. Die Spieler wählen Würfel von Brücken, um Aktionen auszuführen. Die Stärke der Aktion hängt vom Wert des Würfels ab. Wer seine Arbeiter am cleversten einsetzt, um Gärten zu pflegen, Krieger zu trainieren und am Hof aufzusteigen, sammelt die meisten Siegpunkte.</p>' },
+            { name: 'Disney Villainous: Das Böse schläft nie!', category: 'Erweiterung', age: '10+', minAge: 10, players: '2-3', minPlayers: 2, maxPlayers: 3, duration: '40-60 Min.', minDuration: 40, maxDuration: 60, image: 'images/disneyvillainousdasboeseschlaeftnie.jpg', description: '<h3>Ziel des Spiels:</h3><p>Verfolge als einer von drei neuen Disney-Bösewichten dein ganz eigenes, finsteres Ziel und werde zum größten Schurken aller Zeiten.</p><h3>Spielablauf:</h3><p>Diese eigenständig spielbare Erweiterung führt Scar, Rattenzahn und Yzma ein. Jeder Bösewicht hat ein eigenes Spielbrett, ein eigenes Kartendeck und eine einzigartige Siegbedingung. Die Spieler bewegen ihre Figur an Orte auf ihrem Brett, um Aktionen auszuführen, während sie versuchen, die Pläne ihrer Gegner mit Schicksalskarten zu durchkreuzen.</p>' },
             { name: 'Dixit', category: 'Party- & Quizspiel', age: '8+', minAge: 8, players: '3-8', minPlayers: 3, maxPlayers: 8, duration: '30 Min.', minDuration: 30, maxDuration: 30, image: 'images/dixit.jpg', description: '<h3>Ziel des Spiels:</h3><p>Sammle die meisten Punkte durch kreative Bildbeschreibungen und cleveres Raten.</p><h3>Spielablauf:</h3><p>Ein Spieler gibt einen Hinweis zu einer seiner surrealen Bildkarten. Die anderen wählen eine passende Karte aus ihrer Hand. Alle Karten werden gemischt und aufgedeckt. Wer rät, welche Karte die des Erzählers war?</p>' },
             { name: 'Dog', category: 'Familienspiel', age: '8+', minAge: 8, players: '4-6', minPlayers: 4, maxPlayers: 6, duration: '30-45 Min.', minDuration: 30, maxDuration: 45, image: 'images/dog.jpg', description: '<h3>Ziel des Spiels:</h3><p>Bringe als Team deine vier Murmeln ins Ziel.</p><h3>Spielablauf:</h3><p>Statt Würfeln werden Karten verwendet, um die Figuren zu bewegen. Ein taktisches Partnerspiel, das an "Mensch ärgere dich nicht" erinnert, aber viel gemeiner ist.</p>' },
             { name: 'Dominion', category: 'Strategiespiel', age: '13+', minAge: 13, players: '2-4', minPlayers: 2, maxPlayers: 4, duration: '30 Min.', minDuration: 30, maxDuration: 30, image: 'images/dominion.jpg', description: '<h3>Ziel des Spiels:</h3><p>Baue das mächtigste Königreich, indem du das beste Kartendeck zusammenstellst.</p><h3>Spielablauf:</h3><p>Das Pionierspiel des Deckbau-Genres. Alle Spieler starten mit einem identischen, kleinen Deck. In jedem Zug kaufen sie neue Karten aus einer gemeinsamen Auslage und optimieren so ihr Deck, um immer mächtigere Züge zu machen.</p>' },
@@ -427,16 +428,15 @@
                 const target = event.target;
                 if (target.classList.contains('category-btn')) {
                     const category = target.dataset.category;
-                    const isActive = activeCategories.includes(category);
-
-                    if (isActive) {
+                    
+                    if (activeCategories.includes(category)) {
+                        activeCategories = activeCategories.filter(c => c !== category);
                         target.classList.remove('bg-blue-600', 'text-white');
                         target.classList.add('bg-gray-700', 'text-gray-300');
-                        activeCategories = activeCategories.filter(c => c !== category);
                     } else {
+                        activeCategories.push(category);
                         target.classList.remove('bg-gray-700', 'text-gray-300');
                         target.classList.add('bg-blue-600', 'text-white');
-                        activeCategories.push(category);
                     }
                     filterAndRender();
                 }
