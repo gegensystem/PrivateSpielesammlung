@@ -48,10 +48,6 @@
             background-position: right 0.75rem center;
             background-size: 0.65em auto;
         }
-        .category-btn-active {
-            background-color: #2563EB; /* blue-600 */
-            color: #FFFFFF;
-        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 p-4 sm:p-6 md:p-8">
@@ -431,11 +427,15 @@
                 const target = event.target;
                 if (target.classList.contains('category-btn')) {
                     const category = target.dataset.category;
-                    target.classList.toggle('category-btn-active');
+                    const isActive = activeCategories.includes(category);
 
-                    if (activeCategories.includes(category)) {
+                    if (isActive) {
+                        target.classList.remove('bg-blue-600', 'text-white');
+                        target.classList.add('bg-gray-700', 'text-gray-300');
                         activeCategories = activeCategories.filter(c => c !== category);
                     } else {
+                        target.classList.remove('bg-gray-700', 'text-gray-300');
+                        target.classList.add('bg-blue-600', 'text-white');
                         activeCategories.push(category);
                     }
                     filterAndRender();
